@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102a43">
+<title>El Clima de Marce ❤️</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(160deg, #102a43, #176b9a);
+    font-family: Arial, sans-serif;
+    color: white;
+    padding: 20px;
+}
+
+.contenedor {
+    max-width: 460px;
+    margin: auto;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+h1 {
+    font-size: 29px;
+    margin: 0;
+}
+
+.subtitulo {
+    color: #c9e8f7;
+    margin-top: 10px;
+}
+
+.ciudades {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+button {
+    border: none;
+    border-radius: 14px;
+    padding: 15px;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+    background: #285b80;
+}
+
+button.activo {
+    background: #00a8e8;
+    font-weight: bold;
+}
+
+.tarjeta {
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 25px;
+    padding: 25px 18px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.icono {
+    font-size: 75px;
+    margin: 15px;
+}
+
+.temperatura {
+    font-size: 75px;
+    font-weight: bold;
+}
+
+.descripcion {
+    font-size: 19px;
+    margin-bottom: 25px;
+}
+
+.detalles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.dato {
+    background: rgba(255,255,255,0.12);
+    border-radius: 15px;
+    padding: 15px 8px;
+}
+
+.dato small {
+    display: block;
+    color: #c9e8f7;
+    margin-bottom: 8px;
+}
+
+.compartir {
+    width: 100%;
+    margin-top: 20px;
+    background: #25d366;
+    font-weight: bold;
+}
+
+.actualizar {
+    width: 100%;
+    margin-top: 10px;
+    background: #285b80;
+}
+
+.estado {
+    text-align: center;
+    font-size: 13px;
+    color: #c9e8f7;
+    margin-top: 18px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #c9e8f7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<header>
+    <h1>🌤️ El Clima de Marce ❤️</h1>
+    <p class="subtitulo">Tu clima, siempre contigo</p>
+</header>
+
+<div class="ciudades" id="ciudades"></div>
+
+<div class="tarjeta">
+
+    <h2 id="ciudad">Viña del Mar</h2>
+
+    <div class="icono" id="icono">🌤️</div>
+
+    <div class="temperatura" id="temperatura">--°</div>
+
+    <div class="descripcion" id="descripcion">
+        Consultando el clima...
+    </div>
+
+    <div class="detalles">
+
+        <div class="dato">
+            <small>🌡️ Sensación térmica</small>
+            <strong id="sensacion">--</strong>
+        </div>
+
+        <div class="dato">
+            <small>💧 Humedad</small>
+            <strong id="humedad">--</strong>
+        </div>
+
+        <div class="dato">
+            <small>💨 Viento</small>
+            <strong id="viento">--</strong>
+        </div>
+
+        <div class="dato">
+            <small>🌧️ Lluvia</small>
+            <strong id="lluvia">--</strong>
+        </div>
+
+    </div>
+
+</div>
+
+<button class="compartir" onclick="compartir()">
+    📲 Compartir por WhatsApp
+</button>
+
+<button class="actualizar" onclick="consultar(actual)">
+    🔄 Actualizar clima
+</button>
+
+<p class="estado" id="estado"></p>
+
+<footer>
+    ❤️ Hecho especialmente para Marce ❤️
+</footer>
+
+</div>
+
+<script>
+
+const ciudades = {
+    "Viña del Mar": [-33.0245, -71.5518],
+    "Recreo": [-33.0320, -71.5650],
+    "Valparaíso": [-33.0472, -71.6127],
+    "Santiago": [-33.4489, -70.6693]
+};
+
+let actual = "Viña del Mar";
+let resumen = "";
+let solicitudActual = 0;
+
+const $ = id => document.getElementById(id);
+
+function obtenerClima(codigo) {
+
+    if (codigo === 0)
+        return ["☀️", "Despejado"];
+
+    if (codigo <= 3)
+        return ["🌤️", "Parcialmente nublado"];
+
+    if (codigo <= 48)
+        return ["🌫️", "Neblina"];
+
+    if (codigo <= 67)
+        return ["🌧️", "Lluvia"];
+
+    if (codigo <= 77)
+        return ["❄️", "Nieve"];
+
+    if (codigo <= 82)
+        return ["🌦️", "Chubascos"];
+
+    if (codigo <= 86)
+        return ["❄️", "Nevadas"];
+
+    if (codigo >= 95)
+        return ["⛈️", "Tormenta"];
+
+    return ["🌤️", "Clima variable"];
+}
+
+async function consultar(ciudad) {
+
+    actual = ciudad;
+    const solicitud = ++solicitudActual;
+    resumen = "";
+
+    $("ciudad").textContent = ciudad;
+    $("temperatura").textContent = "--°";
+    $("descripcion").textContent = "Consultando el clima...";
+    $("estado").textContent = "Conectando con Open-Meteo...";
+
+    $("sensacion").textContent = "--";
+    $("humedad").textContent = "--";
+    $("viento").textContent = "--";
+    $("lluvia").textContent = "--";
+
+    document.querySelectorAll(".ciudades button").forEach(b => {
+        b.classList.toggle("activo", b.textContent === ciudad);
+    });
+
+    const [lat, lon] = ciudades[ciudad];
+
+    const url =
+        "https://api.open-meteo.com/v1/forecast" +
+        "?latitude=" + lat +
+        "&longitude=" + lon +
+        "&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m" +
+        "&timezone=America%2FSantiago";
+
+    try {
+
+        const respuesta = await fetch(url);
+
+        if (!respuesta.ok)
+            throw new Error("Error al consultar la API");
+
+        const datos = await respuesta.json();
+        if (solicitud !== solicitudActual) return;
+
+        const clima = datos.current;
+
+        if (!clima)
+            throw new Error("Sin datos meteorológicos");
+
+        const [icono, descripcion] =
+            obtenerClima(clima.weather_code);
+
+        $("icono").textContent = icono;
+
+        $("temperatura").textContent =
+            Math.round(clima.temperature_2m) + "°";
+
+        $("descripcion").textContent = descripcion;
+
+        $("sensacion").textContent =
+            Math.round(clima.apparent_temperature) + " °C";
+
+        $("humedad").textContent =
+            clima.relative_humidity_2m + " %";
+
+        $("viento").textContent =
+            clima.wind_speed_10m + " km/h";
+
+        $("lluvia").textContent =
+            clima.precipitation + " mm";
+
+        $("estado").textContent =
+            "Última actualización: " +
+            clima.time.replace("T", " ");
+
+        resumen =
+            "🌤️ EL CLIMA DE MARCE ❤️\n\n" +
+            "📍 " + ciudad + "\n" +
+            "🌡️ Temperatura: " +
+            clima.temperature_2m + " °C\n" +
+            "☁️ " + descripcion + "\n" +
+            "💧 Humedad: " +
+            clima.relative_humidity_2m + "%\n" +
+            "💨 Viento: " +
+            clima.wind_speed_10m + " km/h\n\n" +
+            "❤️ Tu clima, siempre contigo";
+
+    } catch (error) {
+
+        if (solicitud !== solicitudActual) return;
+
+        $("descripcion").textContent =
+            "No se pudo cargar el clima";
+
+        $("estado").textContent =
+            "Comprueba tu conexión a Internet.";
+    }
+}
+
+function compartir() {
+
+    if (!resumen) {
+        alert("Espera a que cargue el clima.");
+        return;
+    }
+
+    const url =
+        "https://wa.me/?text=" +
+        encodeURIComponent(resumen);
+
+    window.open(url, "_blank");
+}
+
+Object.keys(ciudades).forEach(nombre => {
+
+    const boton = document.createElement("button");
+
+    boton.textContent = nombre;
+
+    boton.onclick = () => consultar(nombre);
+
+    $("ciudades").appendChild(boton);
+});
+
+consultar(actual);
+
+</script>
+
+</body>
+</html>
