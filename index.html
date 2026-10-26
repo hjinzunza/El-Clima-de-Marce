@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#102a43">
-<title>🌤️El Clima Exacto de Marce🌤️</title>
+
+<title>🌤️ El Clima y Hora Exacta de Marce 🌤️</title>
 
 <style>
 * {
@@ -14,47 +15,136 @@
 body {
     margin: 0;
     min-height: 100vh;
+    padding: 12px;
     background: linear-gradient(160deg, #102a43, #176b9a);
     font-family: Arial, sans-serif;
     color: white;
-    padding: 20px;
 }
 
 .contenedor {
-    max-width: 460px;
-    margin: auto;
+    max-width: 480px;
+    margin: 10px auto;
+    padding: 18px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 header {
     text-align: center;
-    padding: 20px 0;
+    margin-bottom: 20px;
 }
 
 h1 {
-    font-size: 29px;
-    margin: 0;
+    font-size: 25px;
+    margin: 5px 0;
 }
 
 .subtitulo {
-    color: #c9e8f7;
+    font-size: 14px;
+    color: #d4edff;
+}
+
+.ciudad {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 18px 0;
+    text-transform: uppercase;
+}
+
+.panel-principal {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.clima {
+    text-align: center;
+}
+
+.icono-clima {
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
+
+.temperatura {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.reloj {
+    text-align: center;
+}
+
+.hora {
+    font-size: clamp(27px, 8vw, 42px);
+    font-weight: bold;
+    letter-spacing: -1px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.fecha {
+    font-size: 14px;
+    color: #d4edff;
     margin-top: 10px;
+    text-transform: capitalize;
+}
+
+.descripcion {
+    text-align: center;
+    font-size: 18px;
+    margin: 18px 0;
+}
+
+.detalles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.dato {
+    background: rgba(255,255,255,0.1);
+    padding: 12px 6px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.dato small {
+    display: block;
+    color: #d4edff;
+    margin-bottom: 7px;
+}
+
+.pronostico {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 19px;
+    font-weight: bold;
 }
 
 .ciudades {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 25px 0;
+    gap: 9px;
+    margin-top: 15px;
 }
 
 button {
     border: none;
-    border-radius: 14px;
-    padding: 15px;
+    border-radius: 12px;
+    padding: 13px 8px;
+    background: #285b80;
+    color: white;
     font-size: 15px;
     cursor: pointer;
-    color: white;
-    background: #285b80;
 }
 
 button.activo {
@@ -62,51 +152,16 @@ button.activo {
     font-weight: bold;
 }
 
-.tarjeta {
-    background: rgba(255,255,255,0.13);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 25px;
-    padding: 25px 18px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+button:active {
+    transform: scale(0.97);
 }
 
-.icono {
-    font-size: 75px;
-    margin: 15px;
-}
-
-.temperatura {
-    font-size: 75px;
-    font-weight: bold;
-}
-
-.descripcion {
-    font-size: 19px;
-    margin-bottom: 25px;
-}
-
-.detalles {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.dato {
-    background: rgba(255,255,255,0.12);
-    border-radius: 15px;
-    padding: 15px 8px;
-}
-
-.dato small {
-    display: block;
-    color: #c9e8f7;
-    margin-bottom: 8px;
+.acciones {
+    margin-top: 20px;
 }
 
 .compartir {
     width: 100%;
-    margin-top: 20px;
     background: #25d366;
     font-weight: bold;
 }
@@ -114,21 +169,91 @@ button.activo {
 .actualizar {
     width: 100%;
     margin-top: 10px;
-    background: #285b80;
 }
 
 .estado {
     text-align: center;
-    font-size: 13px;
-    color: #c9e8f7;
-    margin-top: 18px;
+    font-size: 12px;
+    color: #d4edff;
+    margin-top: 20px;
 }
 
 footer {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 13px;
-    color: #c9e8f7;
+    color: #d4edff;
+}
+
+/* ANIMACIONES */
+
+.sol {
+    animation: girar 14s linear infinite;
+}
+
+.nube {
+    animation: flotar 4s ease-in-out infinite alternate;
+}
+
+.lluvia {
+    animation: llover 0.8s ease-in-out infinite alternate;
+}
+
+.tormenta {
+    animation: relampago 2s infinite;
+}
+
+.nieve {
+    animation: nevar 3s ease-in-out infinite alternate;
+}
+
+.niebla {
+    animation: flotar 5s ease-in-out infinite alternate;
+}
+
+@keyframes girar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes flotar {
+    from { transform: translateX(-9px); }
+    to { transform: translateX(9px); }
+}
+
+@keyframes llover {
+    from { transform: translateY(-5px); }
+    to { transform: translateY(6px); }
+}
+
+@keyframes relampago {
+    0%, 85%, 100% { opacity: 1; }
+    88%, 92% { opacity: 0.3; }
+}
+
+@keyframes nevar {
+    from { transform: translateY(-7px) rotate(-8deg); }
+    to { transform: translateY(7px) rotate(8deg); }
+}
+
+@media (max-width: 360px) {
+    .contenedor {
+        padding: 12px;
+    }
+
+    .temperatura {
+        font-size: 40px;
+    }
+
+    .hora {
+        font-size: 27px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .icono-clima {
+        animation: none !important;
+    }
 }
 </style>
 </head>
@@ -138,59 +263,93 @@ footer {
 <div class="contenedor">
 
 <header>
-    <h1>🌤️El Clima Exacto🌤️</h1>
-    <p class="subtitulo"> ❤️ Hecho especialmente para Marce ❤️</p>
+    <h1>🌤️ EL CLIMA Y HORA EXACTA 🌤️</h1>
+    <p class="subtitulo">
+        ❤️ Hecho especialmente para Marce ❤️
+    </p>
 </header>
 
-<div class="ciudades" id="ciudades"></div>
+<div class="ciudad" id="ciudad">
+    VIÑA DEL MAR
+</div>
 
-<div class="tarjeta">
+<div class="panel-principal">
 
-    <h2 id="ciudad">Viña del Mar</h2>
+    <div class="clima">
 
-    <div class="icono" id="icono">🌤️</div>
+        <div class="icono-clima nube" id="icono">
+            🌤️
+        </div>
 
-    <div class="temperatura" id="temperatura">--°</div>
+        <div class="temperatura" id="temperatura">
+            --°C
+        </div>
 
-    <div class="descripcion" id="descripcion">
-        Consultando el clima...
     </div>
 
-    <div class="detalles">
+    <div class="reloj">
 
-        <div class="dato">
-            <small>🌡️ Sensación térmica</small>
-            <strong id="sensacion">--</strong>
+        <div class="hora" id="horaChile">
+            --:--:--
         </div>
 
-        <div class="dato">
-            <small>💧 Humedad</small>
-            <strong id="humedad">--</strong>
-        </div>
-
-        <div class="dato">
-            <small>💨 Viento</small>
-            <strong id="viento">--</strong>
-        </div>
-
-        <div class="dato">
-            <small>🌧️ Lluvia</small>
-            <strong id="lluvia">--</strong>
+        <div class="fecha" id="fechaChile">
+            Consultando hora...
         </div>
 
     </div>
 
 </div>
 
-<button class="compartir" onclick="compartir()">
-    📲 Compartir por WhatsApp
-</button>
+<div class="descripcion" id="descripcion">
+    Consultando el clima...
+</div>
 
-<button class="actualizar" onclick="consultar(actual)">
-    🔄 Actualizar clima
-</button>
+<div class="detalles">
 
-<p class="estado" id="estado"></p>
+    <div class="dato">
+        <small>🌡️ Sensación térmica</small>
+        <strong id="sensacion">--</strong>
+    </div>
+
+    <div class="dato">
+        <small>💧 Humedad</small>
+        <strong id="humedad">--</strong>
+    </div>
+
+    <div class="dato">
+        <small>💨 Viento</small>
+        <strong id="viento">--</strong>
+    </div>
+
+    <div class="dato">
+        <small>🌧️ Lluvia</small>
+        <strong id="lluvia">--</strong>
+    </div>
+
+</div>
+
+<div class="pronostico">
+    🌤️ PRONÓSTICO 🌤️
+</div>
+
+<div class="ciudades" id="ciudades"></div>
+
+<p class="estado" id="estado">
+    Conectando con Open-Meteo...
+</p>
+
+<div class="acciones">
+
+    <button class="compartir" onclick="compartir()">
+        📲 Compartir por WhatsApp
+    </button>
+
+    <button class="actualizar" onclick="consultar(actual)">
+        🔄 Actualizar clima
+    </button>
+
+</div>
 
 <footer>
     ❤️ Hecho especialmente para Marce ❤️
@@ -200,11 +359,14 @@ footer {
 
 <script>
 
+// LOCALIDADES
+
 const ciudades = {
     "Viña del Mar": [-33.0245, -71.5518],
     "Recreo": [-33.0320, -71.5650],
     "Valparaíso": [-33.0472, -71.6127],
-    "Santiago": [-33.4489, -70.6693]
+    "Santiago": [-33.4489, -70.6693],
+    "Doñihue": [-34.2261, -70.9649]
 };
 
 let actual = "Viña del Mar";
@@ -213,44 +375,53 @@ let solicitudActual = 0;
 
 const $ = id => document.getElementById(id);
 
+// CLIMA Y ANIMACIONES
+
 function obtenerClima(codigo) {
 
     if (codigo === 0)
-        return ["☀️", "Despejado"];
+        return ["☀️", "Despejado", "sol"];
 
     if (codigo <= 3)
-        return ["🌤️", "Parcialmente nublado"];
+        return ["🌤️", "Parcialmente nublado", "nube"];
 
     if (codigo <= 48)
-        return ["🌫️", "Neblina"];
+        return ["🌫️", "Neblina", "niebla"];
 
     if (codigo <= 67)
-        return ["🌧️", "Lluvia"];
+        return ["🌧️", "Lluvia", "lluvia"];
 
     if (codigo <= 77)
-        return ["❄️", "Nieve"];
+        return ["❄️", "Nieve", "nieve"];
 
     if (codigo <= 82)
-        return ["🌦️", "Chubascos"];
+        return ["🌦️", "Chubascos", "lluvia"];
 
     if (codigo <= 86)
-        return ["❄️", "Nevadas"];
+        return ["❄️", "Nevadas", "nieve"];
 
     if (codigo >= 95)
-        return ["⛈️", "Tormenta"];
+        return ["⛈️", "Tormenta", "tormenta"];
 
-    return ["🌤️", "Clima variable"];
+    return ["🌤️", "Clima variable", "nube"];
 }
+
+// CONSULTAR API OPEN-METEO
 
 async function consultar(ciudad) {
 
     actual = ciudad;
+
     const solicitud = ++solicitudActual;
+
     resumen = "";
 
-    $("ciudad").textContent = ciudad;
-    $("temperatura").textContent = "--°";
+    $("ciudad").textContent = ciudad.toUpperCase();
+
+    $("temperatura").textContent = "--°C";
+
     $("descripcion").textContent = "Consultando el clima...";
+
     $("estado").textContent = "Conectando con Open-Meteo...";
 
     $("sensacion").textContent = "--";
@@ -276,23 +447,27 @@ async function consultar(ciudad) {
         const respuesta = await fetch(url);
 
         if (!respuesta.ok)
-            throw new Error("Error al consultar la API");
+            throw new Error("Error de conexión");
 
         const datos = await respuesta.json();
+
         if (solicitud !== solicitudActual) return;
 
         const clima = datos.current;
 
         if (!clima)
-            throw new Error("Sin datos meteorológicos");
+            throw new Error("Sin datos");
 
-        const [icono, descripcion] =
+        const [icono, descripcion, animacion] =
             obtenerClima(clima.weather_code);
 
         $("icono").textContent = icono;
 
+        $("icono").className =
+            "icono-clima " + animacion;
+
         $("temperatura").textContent =
-            Math.round(clima.temperature_2m) + "°";
+            Math.round(clima.temperature_2m) + "°C";
 
         $("descripcion").textContent = descripcion;
 
@@ -313,7 +488,7 @@ async function consultar(ciudad) {
             clima.time.replace("T", " ");
 
         resumen =
-            "🌤️ EL CLIMA EXACTO DE MARCE 🌤️\n\n" +
+            "🌤️ EL CLIMA Y HORA EXACTA DE MARCE 🌤️\n\n" +
             "📍 " + ciudad + "\n" +
             "🌡️ Temperatura: " +
             clima.temperature_2m + " °C\n" +
@@ -322,7 +497,7 @@ async function consultar(ciudad) {
             clima.relative_humidity_2m + "%\n" +
             "💨 Viento: " +
             clima.wind_speed_10m + " km/h\n\n" +
-            "🌤️Que tengas buen día🌤️❤️";
+            "🌤️ Que tengas buen día 🌤️❤️";
 
     } catch (error) {
 
@@ -335,6 +510,33 @@ async function consultar(ciudad) {
             "Comprueba tu conexión a Internet.";
     }
 }
+
+// RELOJ DE CHILE
+
+function actualizarRelojChile() {
+
+    const ahora = new Date();
+
+    $("horaChile").textContent =
+        new Intl.DateTimeFormat("es-CL", {
+            timeZone: "America/Santiago",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hourCycle: "h23"
+        }).format(ahora);
+
+    $("fechaChile").textContent =
+        new Intl.DateTimeFormat("es-CL", {
+            timeZone: "America/Santiago",
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }).format(ahora);
+}
+
+// COMPARTIR WHATSAPP
 
 function compartir() {
 
@@ -350,6 +552,8 @@ function compartir() {
     window.open(url, "_blank");
 }
 
+// CREAR BOTONES
+
 Object.keys(ciudades).forEach(nombre => {
 
     const boton = document.createElement("button");
@@ -361,7 +565,17 @@ Object.keys(ciudades).forEach(nombre => {
     $("ciudades").appendChild(boton);
 });
 
+// INICIAR
+
+actualizarRelojChile();
+
+setInterval(actualizarRelojChile, 1000);
+
 consultar(actual);
+
+// ACTUALIZACIÓN AUTOMÁTICA CADA 10 MINUTOS
+
+setInterval(() => consultar(actual), 600000);
 
 </script>
 
